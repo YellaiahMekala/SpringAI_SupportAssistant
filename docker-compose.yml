@@ -1,8 +1,102 @@
 version: '3.8'
 services:
+  db:
+    image: pgvector/pgvector:0.8.7-pg17
+    container_name: support-db
+    environment:
+      POSTGRES_DB: support_assistant
+      POSTGRES_USER: support
+      POSTGRES_PASSWORD: ${SUPPORT_DB_PASSWORD:?set SUPPORT_DB_PASSWORD in the environment or .env}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U support -d support_assistant"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.8
+    container_name: support-keycloak
+    command: ["start-dev", "--import-realm"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?set KEYCLOAK_ADMIN_PASSWORD in the environment or .env}
+      KC_HOSTNAME: http://localhost:8180
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./docker/keycloak/support-realm.json:/opt/keycloak/data/import/support-realm.json:ro
+
   ollama:
-    hostname: ollama
-    container_name: ollama
     image: ollama/ollama
+    container_name: ollama
+    hostname: ollama
     ports:
       - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
+  app:
+    build: .
+    container_name: enterprise-spring-ai-support-assistant
+    ports:
+      - "8080:8080"
+    environment:
+      SUPPORT_DB_URL: jdbc:postgresql://db:5432/support_assistant
+      SUPPORT_DB_USER: support
+      SUPPORT_DB_PASSWORD: ${SUPPORT_DB_PASSWORD:?set SUPPORT_DB_PASSWORD in the environment or .env}
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_CHAT_MODEL: llama3.2:3b
+      SPRING_PROFILES_ACTIVE: demo
+      OIDC_ISSUER_URI: http://localhost:8180/realms/support
+      APP_METRICS_PUBLIC_SCRAPE: ${APP_METRICS_PUBLIC_SCRAPE:-false}
+      OIDC_JWK_SET_URI: http://keycloak:8080/realms/support/protocol/openid-connect/certs
+    depends_on:
+      db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+      ollama:
+        condition: service_started
+
+  web:
+    build: ./frontend
+    container_name: enterprise-spring-ai-support-assistant-web
+    ports:
+      - "8081:8080"
+    depends_on:
+      - app
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    profiles: ["observability"]
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - app
+
+  grafana:
+    image: grafana/grafana:11.3.1
+    profiles: ["observability"]
+    ports:
+      - "127.0.0.1:3000:3000"
+    entrypoint:
+      - sh
+      - -c
+      - 'test -n "$GRAFANA_ADMIN_PASSWORD" || { echo "Set GRAFANA_ADMIN_PASSWORD"; exit 1; }; export GF_SECURITY_ADMIN_PASSWORD="$GRAFANA_ADMIN_PASSWORD"; exec /run.sh'
+    environment:
+      GRAFANA_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-}
+    volumes:
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+
+volumes:
+  db-data:
+  ollama-data:

@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local secrets
+.env
+
+# Private working notes — never commit (portfolio, tracker, Claude context, BRD/TDD)
+_private/
+docs/
+
+# Maven / logs
+*.log

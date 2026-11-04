@@ -1,41 +1,87 @@
 spring:
   application:
-    name: spring-openai-demo
+    name: enterprise-spring-ai-support-assistant
+
+  datasource:
+    url: ${SUPPORT_DB_URL:jdbc:postgresql://localhost:5432/support_assistant}
+    username: ${SUPPORT_DB_USER:support}
+    password: ${SUPPORT_DB_PASSWORD}
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8180/realms/support}
+          jwk-set-uri: ${OIDC_JWK_SET_URI:http://localhost:8180/realms/support/protocol/openid-connect/certs}
 
   ai:
-    openai:
-      api-key: ${OPENAI_APIKEY}
-
-#    chat:
-#      options:
-#        model: gpt-4o-mini
-#        temperature: 0.3
-#        max_tokens: 500
-
-
+    model:
+      chat: ollama
+      embedding: ollama
+      audio:
+        speech: none
+        transcription: none
+      image: none
+      moderation: none
 
     ollama:
-      base-url: http://localhost:11434
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      init:
+        pull-model-strategy: never
       chat:
-        model: llama3.2:1b
+        model: ${OLLAMA_CHAT_MODEL:llama3.2:3b}
+      embedding:
+        options:
+          model: ${OLLAMA_EMBEDDING_MODEL:nomic-embed-text}
 
-    chat:
-      client:
-        enabled: false
+    retry:
+      max-attempts: 2
+      backoff:
+        initial-interval: 500ms
+
+  http:
+    clients:
+      connect-timeout: 5s
+      read-timeout: 120s
+
+app:
+  token-budget:
+    max-input-tokens: 2000
+  knowledge:
+    top-k: 4
+    min-score: 0.5
+    chunk-max-chars: 1000
+    chunk-overlap-chars: 150
+    max-upload-bytes: 1048576
+    ingest-dir: ./knowledge
+  governance:
+    reserved-output-tokens: 500
+    safety-margin-percent: 10
+    daily-token-limit: 50000
+    # Optional pricing (micro-units per million tokens) enables cost_status ESTIMATED:
+    # pricing:
+    #   as-of: 2026-11-01
+    #   models:
+    #     gpt-4o-mini: { input-per-million-micros: 0, output-per-million-micros: 0 }
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+
 logging:
   level:
-    org:
-      springframework:
-        ai:
-          chat:
-            client:
-              advisor: DEBUG
-
-
-
-#    google:
-#      genai:
-#        api-key: ${GEMINI_API_KEY}
+    org.springframework.ai.chat.client.advisor: INFO
 
 server:
   port: 8080

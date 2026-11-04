@@ -1,0 +1,74 @@
+<section class="card" aria-labelledby="orders-title">
+  <h1 id="orders-title">{{ auth.isAgent() ? 'Recent orders' : 'Your orders' }}</h1>
+
+  @if (auth.isAgent()) {
+    <form class="lookup" (submit)="find($event)">
+      <label for="lookup">Look up an order by reference</label>
+      <div class="row">
+        <input id="lookup" type="text" maxlength="32" autocomplete="off" placeholder="For example ORD-2001"
+               [value]="lookup()" (input)="onLookup($event)" />
+        <button type="submit" [disabled]="!lookup()">Look up</button>
+      </div>
+    </form>
+  }
+
+  @if (loading()) {
+    <p class="hint" role="status">Loading orders…</p>
+  } @else if (listError()) {
+    <p class="alert alert-danger" role="alert">{{ listErrorText() }}</p>
+  } @else if (orders().length === 0) {
+    <p class="hint">There are no orders to show.</p>
+  } @else {
+    <table>
+      <caption class="visually-hidden">Orders</caption>
+      <thead>
+        <tr>
+          <th scope="col">Order</th>
+          <th scope="col">Status</th>
+          <th scope="col">Promised date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders(); track order.orderRef) {
+          <tr>
+            <td><button type="button" class="link" (click)="open(order.orderRef)">{{ order.orderRef }}</button></td>
+            <td><span class="badge" [class]="'badge badge-' + order.status">{{ order.status }}</span></td>
+            <td>{{ order.promisedDate ? (order.promisedDate | date: 'mediumDate') : 'Not set' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>
+
+<div aria-live="polite">
+  @if (detailError()) {
+    <p class="alert alert-danger" role="alert">{{ detailErrorText() }}</p>
+  }
+
+  @if (selected(); as order) {
+    <section class="card detail" aria-labelledby="detail-title">
+      <h2 id="detail-title">
+        {{ order.orderRef }}
+        <span class="badge" [class]="'badge badge-' + order.status">{{ order.status }}</span>
+      </h2>
+      <p>
+        Promised date:
+        {{ order.promisedDate ? (order.promisedDate | date: 'mediumDate') : 'Not set' }}
+      </p>
+      <h3>Milestones</h3>
+      @if (order.events.length === 0) {
+        <p class="hint">No milestones recorded yet.</p>
+      } @else {
+        <ol class="timeline">
+          @for (event of order.events; track $index) {
+            <li>
+              <span class="what">{{ event.eventType }}</span>
+              <time [attr.datetime]="event.occurredAt">{{ event.occurredAt | date: 'medium' }}</time>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+  }
+</div>

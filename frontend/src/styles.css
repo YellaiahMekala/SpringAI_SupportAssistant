@@ -1,0 +1,245 @@
+/* Global styles: a small design system shared by every screen.
+   Colours are chosen for text contrast of at least 4.5:1 (checked by the automated accessibility tests). */
+
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --text: #1b1f24;
+  --muted: #4b5563;
+  --border: #cfd5dd;
+  --primary: #1d4ed8;
+  --primary-hover: #1e40af;
+  --on-primary: #ffffff;
+  --link: #1d4ed8;
+  --focus: #1d4ed8;
+
+  --danger-bg: #fdecea;
+  --danger-text: #8a1c13;
+  --warn-bg: #fff4e5;
+  --warn-text: #7a4100;
+  --info-bg: #e8f1fe;
+  --info-text: #0b3d91;
+  --ok-bg: #e6f4ea;
+  --ok-text: #14532d;
+  --neutral-bg: #eceff3;
+  --neutral-text: #374151;
+
+  --radius: 10px;
+  --shadow: 0 1px 2px rgb(16 24 40 / 6%), 0 1px 3px rgb(16 24 40 / 8%);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1419;
+    --surface: #1a2029;
+    --text: #e6e9ee;
+    --muted: #aab3bf;
+    --border: #3a4452;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --link: #9bbcff;
+    --focus: #9bbcff;
+
+    --danger-bg: #3b1714;
+    --danger-text: #ffb4ab;
+    --warn-bg: #3a2a10;
+    --warn-text: #ffd699;
+    --info-bg: #14284a;
+    --info-text: #b3cdff;
+    --ok-bg: #12301d;
+    --ok-text: #a7e3b9;
+    --neutral-bg: #2a3340;
+    --neutral-text: #d1d7e0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin: 0 0 1rem;
+}
+
+h2 {
+  font-size: 1.125rem;
+  margin: 0 0 0.5rem;
+}
+
+a {
+  color: var(--link);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin: 1rem 0 0.35rem;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+button:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+button.secondary:hover:not(:disabled) {
+  background: var(--neutral-bg);
+}
+
+button.link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--link);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0;
+}
+
+.alert {
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 1rem 0 0;
+}
+
+.alert-danger {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.alert-warn {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.alert-info {
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  background: var(--neutral-bg);
+  color: var(--neutral-text);
+}
+
+.badge-DELAYED,
+.badge-CANCELLED {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+
+.badge-SHIPPED {
+  background: var(--info-bg);
+  color: var(--info-text);
+}
+
+.badge-DELIVERED {
+  background: var(--ok-bg);
+  color: var(--ok-text);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

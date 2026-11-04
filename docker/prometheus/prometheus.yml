@@ -1,0 +1,9 @@
+# Scrapes the application's aggregate counters. Needs APP_METRICS_PUBLIC_SCRAPE=true in the app's environment.
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: support-assistant
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['app:8080']

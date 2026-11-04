@@ -1,0 +1,114 @@
+<section class="card" aria-labelledby="chat-title">
+  <h1 id="chat-title">Ask support</h1>
+
+  <form (submit)="send($event)" novalidate>
+    <label for="orderRef">About an order (optional)</label>
+    <input
+      id="orderRef"
+      type="text"
+      list="order-suggestions"
+      maxlength="32"
+      autocomplete="off"
+      placeholder="For example ORD-1001"
+      [value]="orderRef()"
+      (input)="onOrderRef($event)"
+      aria-describedby="orderRef-hint"
+    />
+    <datalist id="order-suggestions">
+      @for (order of orders(); track order.orderRef) {
+        <option [value]="order.orderRef">{{ order.status }}</option>
+      }
+    </datalist>
+    <p id="orderRef-hint" class="hint">
+      The assistant only sees facts for an order you are allowed to view.
+    </p>
+
+    <label for="question">Your question</label>
+    <textarea
+      id="question"
+      [attr.maxlength]="maxLength"
+      [value]="question()"
+      (input)="onQuestion($event)"
+      aria-describedby="question-hint"
+    ></textarea>
+    <p id="question-hint" class="hint">
+      Do not include passwords, one-time codes or card security codes.
+      <span>{{ question().length }} / {{ maxLength }}</span>
+    </p>
+
+    <div class="actions">
+      <button type="submit" [disabled]="!canSend()">Send</button>
+      @if (state() === 'working') {
+        <button type="button" class="secondary" (click)="cancel()">Cancel</button>
+      }
+    </div>
+  </form>
+
+  <div class="result" aria-live="polite" [attr.aria-busy]="state() === 'working'">
+    @switch (state()) {
+      @case ('working') {
+        <p class="working"><span class="spinner" aria-hidden="true"></span> The assistant is answering…</p>
+      }
+      @case ('cancelled') {
+        <p class="alert alert-info">Cancelled. Nothing more will be added to the answer.</p>
+      }
+      @case ('interrupted') {
+        <p class="alert alert-warn">
+          The answer was cut off before it finished. What is shown may be incomplete. Please try again.
+        </p>
+      }
+      @case ('failed') {
+        <div class="alert alert-danger" role="alert">
+          <p>{{ errorText() }}</p>
+          @if (sessionEnded()) {
+            <button type="button" (click)="signInAgain()">Sign in again</button>
+          }
+          @if (error()?.requestId; as ref) {
+            <p class="ref">Reference: {{ ref }}</p>
+          }
+        </div>
+      }
+    }
+
+    @if (answer()) {
+      <h2>Answer</h2>
+      <p class="answer">{{ answer() }}</p>
+    }
+
+    @if (citations().length > 0) {
+      <h2>Sources</h2>
+      <ol class="sources">
+        @for (source of citations(); track source.id) {
+          <li>
+            <span class="marker">[{{ source.id }}]</span>
+            {{ source.title }} (version {{ source.version }}){{ source.section ? ', ' + source.section : '' }}
+            <details>
+              <summary>Show the passage</summary>
+              <p class="excerpt">{{ source.excerpt }}</p>
+            </details>
+          </li>
+        }
+      </ol>
+    }
+
+    @if (usage(); as u) {
+      @switch (u.status) {
+        @case ('ABSTAIN') {
+          <p class="alert alert-info">
+            There is not enough reliable information to answer this. You can rephrase, or contact support.
+          </p>
+        }
+        @case ('CLARIFY') {
+          <p class="alert alert-info">More detail is needed to answer this. Please add it and ask again.</p>
+        }
+        @case ('DENY') {
+          <p class="alert alert-danger">You are not allowed to see that information.</p>
+        }
+      }
+      <p class="hint">
+        {{ u.inputTokens + u.outputTokens }} tokens used
+        ({{ u.inputTokens }} in, {{ u.outputTokens }} out){{ u.estimated ? ', estimated' : '' }}.
+      </p>
+    }
+  </div>
+</section>

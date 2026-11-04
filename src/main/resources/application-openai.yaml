@@ -1,0 +1,18 @@
+# SPRING_PROFILES_ACTIVE=openai and OPENAI_API_KEY required.
+# OPENAI_BASE_URL may point at any OpenAI-compatible server.
+# Embedding dimension differs from Ollama; re-ingest after switching providers.
+spring:
+  ai:
+    model:
+      chat: openai
+      embedding: openai
+    openai:
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+          temperature: 0.3
+      embedding:
+        options:
+          model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}

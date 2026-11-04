@@ -1,0 +1,31 @@
+<section class="card" aria-labelledby="usage-title">
+  <h1 id="usage-title">Today's usage</h1>
+
+  @if (loading()) {
+    <p class="hint" role="status">Loading…</p>
+  } @else if (error()) {
+    <p class="alert alert-danger" role="alert">{{ errorText() }}</p>
+  } @else if (usage(); as u) {
+    <p class="numbers">
+      <strong>{{ u.tokensUsed }}</strong> of <strong>{{ u.dailyLimit }}</strong> tokens used
+      <span class="remaining">({{ u.remainingTokens }} remaining)</span>
+    </p>
+
+    <div
+      class="bar"
+      role="progressbar"
+      aria-label="Share of today's token allowance used"
+      [attr.aria-valuenow]="percent()"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    >
+      <div class="fill" [class.near]="nearLimit()" [style.width.%]="percent()"></div>
+    </div>
+
+    <p class="hint">{{ u.note }}</p>
+  }
+
+  <div class="actions">
+    <button type="button" class="secondary" (click)="refresh()" [disabled]="loading()">Refresh</button>
+  </div>
+</section>

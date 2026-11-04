@@ -1,0 +1,47 @@
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="top-inner">
+    <span class="brand">Enterprise Spring AI Support Assistant</span>
+
+    <nav aria-label="Main">
+      <a routerLink="/chat" routerLinkActive="active">Ask support</a>
+      <a routerLink="/orders" routerLinkActive="active">Orders</a>
+      <a routerLink="/usage" routerLinkActive="active">Usage</a>
+      @if (auth.isAgent()) {
+        <a routerLink="/documents" routerLinkActive="active">Documents</a>
+      }
+    </nav>
+
+    <div class="user">
+      @if (auth.me(); as me) {
+        <span class="who">
+          {{ auth.displayName() }}
+          @if (auth.isAgent()) {
+            <span class="badge">Support agent</span>
+          }
+        </span>
+        <button type="button" class="secondary" (click)="signOut()">Sign out</button>
+      }
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  @if (auth.me()) {
+    <router-outlet />
+  } @else {
+    <div class="card" role="alert">
+      <h1>No access</h1>
+      <p>
+        Your account is signed in but has no role for this application. Ask an administrator to give you the
+        customer or support agent role, then sign in again.
+      </p>
+      <button type="button" (click)="signOut()">Sign out</button>
+    </div>
+  }
+</main>
+
+<footer>
+  <p>Token counts shown here are estimates unless the model provider reported them.</p>
+</footer>

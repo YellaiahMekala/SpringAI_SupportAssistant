@@ -1,0 +1,12 @@
+target/
+.idea/
+.git/
+.mvn/wrapper/*.jar
+docs/
+_private/
+*.md
+!README.md
+!SECURITY.md
+!evaluation/README.md
+*.log
+.env

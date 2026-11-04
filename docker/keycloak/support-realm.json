@@ -1,0 +1,70 @@
+{
+  "realm": "support",
+  "displayName": "Support Assistant (LOCAL DEVELOPMENT ONLY)",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "accessTokenLifespan": 300,
+  "roles": {
+    "realm": [
+      { "name": "customer", "description": "A customer: may read only their own orders" },
+      { "name": "support_agent", "description": "A support agent: may read any customer's orders" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "support-ui",
+      "name": "Support Assistant web UI (used from Phase 4)",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:4200/*", "http://localhost:8081/*"],
+      "webOrigins": ["+"],
+      "attributes": { "pkce.code.challenge.method": "S256" }
+    },
+    {
+      "clientId": "support-dev",
+      "name": "Local development token client (password grant). DEV ONLY - never enable outside a laptop.",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true
+    }
+  ],
+  "users": [
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "username": "alice",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Alice",
+      "lastName": "Demo",
+      "email": "alice@example.test",
+      "credentials": [{ "type": "password", "value": "Demo-pass-1", "temporary": false }],
+      "realmRoles": ["customer"]
+    },
+    {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "username": "bob",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Bob",
+      "lastName": "Demo",
+      "email": "bob@example.test",
+      "credentials": [{ "type": "password", "value": "Demo-pass-1", "temporary": false }],
+      "realmRoles": ["customer"]
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "username": "agent",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Agent",
+      "lastName": "Demo",
+      "email": "agent@example.test",
+      "credentials": [{ "type": "password", "value": "Demo-pass-1", "temporary": false }],
+      "realmRoles": ["support_agent"]
+    }
+  ]
+}

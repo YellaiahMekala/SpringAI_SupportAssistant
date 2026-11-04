@@ -1,0 +1,84 @@
+<section class="card" aria-labelledby="documents-title">
+  <h1 id="documents-title">Knowledge documents</h1>
+  <p class="hint">
+    Upload a policy or help article. It is split into passages, embedded, and used as evidence for answers.
+    Do not upload personal data or secrets.
+  </p>
+
+  <form (submit)="upload($event)" novalidate>
+    <label for="docFile">File (.md or .txt, up to 1 MiB)</label>
+    <input id="docFile" type="file" accept=".md,.txt,text/markdown,text/plain" (change)="onFile($event)" />
+
+    <label for="docTitle">Title (optional)</label>
+    <input id="docTitle" type="text" maxlength="200" [value]="title()" (input)="onTitle($event)" />
+
+    <label for="docVisibility">Who can see answers based on it</label>
+    <select id="docVisibility" [value]="visibility()" (change)="onVisibility($event)">
+      <option value="PUBLIC">Everyone (customers and agents)</option>
+      <option value="AGENT_ONLY">Support agents only</option>
+    </select>
+
+    <div class="actions">
+      <button type="submit" [disabled]="!canUpload()">{{ uploading() ? 'Uploading…' : 'Upload' }}</button>
+    </div>
+  </form>
+
+  <div class="messages" aria-live="polite">
+    @if (localError()) {
+      <p class="alert alert-danger" role="alert">{{ localError() }}</p>
+    }
+    @if (uploadError()) {
+      <div class="alert alert-danger" role="alert">
+        <p>{{ uploadErrorText() }}</p>
+        @if (uploadError()?.requestId; as ref) {
+          <p class="ref">Reference: {{ ref }}</p>
+        }
+      </div>
+    }
+    @if (result(); as r) {
+      <p class="alert alert-info">{{ resultText(r) }}</p>
+    }
+  </div>
+
+  <h2>Stored documents</h2>
+  @if (loading()) {
+    <p class="hint" role="status">Loading…</p>
+  } @else if (listError()) {
+    <p class="alert alert-danger" role="alert">{{ listErrorText() }}</p>
+  } @else if (documents().length === 0) {
+    <p class="hint">No documents are stored yet.</p>
+  } @else {
+    <table>
+      <caption class="sr-only">Stored documents</caption>
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Version</th>
+          <th scope="col">Visibility</th>
+          <th scope="col">Passages</th>
+          <th scope="col">Embedded</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (doc of documents(); track doc.id) {
+          <tr>
+            <td>{{ doc.title }}</td>
+            <td>{{ doc.version }}</td>
+            <td>{{ doc.visibility === 'AGENT_ONLY' ? 'Agents only' : 'Everyone' }}</td>
+            <td>{{ doc.chunks }}</td>
+            <td>
+              {{ doc.embeddedForProvider }} / {{ doc.chunks }}
+              @if (needsReindex(doc)) {
+                <span class="reindex">Needs re-embedding: upload the file again</span>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <div class="actions">
+    <button type="button" class="secondary" (click)="refresh()" [disabled]="loading()">Refresh</button>
+  </div>
+</section>

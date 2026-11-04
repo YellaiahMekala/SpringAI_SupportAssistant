@@ -1,34 +1,20 @@
 package com.springai.service;
 
+import com.springai.governance.ModelAnswer;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+/** Multi-model chat routing (Ollama wired; call via GovernedCalls). */
 @Service
 public class MultiModelChatService {
 
-    private final ChatClient openAIChatClient;
-    private final ChatClient ollamaChatClient;
+    private final ChatClient chatClient;
 
-    public MultiModelChatService(@Qualifier("openAIChatClient")ChatClient openAIChatClient,@Qualifier("ollamaChatClient") ChatClient ollamaChatClient) {
-        this.openAIChatClient = openAIChatClient;
-        this.ollamaChatClient = ollamaChatClient;
+    public MultiModelChatService(ChatClient.Builder chatClientBuilder) {
+        this.chatClient = chatClientBuilder.build();
     }
 
-
-    public  String chatWithOpenAI(String message){
-        return openAIChatClient
-                .prompt(message)
-                .call()
-                .content();
+    public ModelAnswer<String> chatWithOllama(String message) {
+        return ModelAnswer.ofText(chatClient.prompt(message).call().chatResponse());
     }
-
-    public String chatWithOllama(String message){
-        return ollamaChatClient
-                .prompt(message)
-                .call()
-                .content();
-
-    }
-
 }

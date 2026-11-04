@@ -1,0 +1,7 @@
+apiVersion: 1
+providers:
+  - name: support-assistant
+    folder: Support Assistant
+    type: file
+    options:
+      path: /var/lib/grafana/dashboards

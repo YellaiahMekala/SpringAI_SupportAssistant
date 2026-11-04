@@ -1,0 +1,46 @@
+{
+  "title": "Enterprise Spring AI Support Assistant",
+  "uid": "support-assistant",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-1h", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "Tokens per minute (by direction)",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum by (direction) (rate(support_tokens_total[5m])) * 60", "legendFormat": "{{direction}}" } ]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Requests per minute (admitted vs rejected)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum by (result) (rate(support_requests_total[5m])) * 60", "legendFormat": "{{result}}" } ]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "Rejections by reason",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum by (code) (increase(support_rejections_total[15m]))", "legendFormat": "{{code}}" } ]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "Answer decisions (answer / clarify / abstain)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum by (status) (increase(support_decisions_total[15m]))", "legendFormat": "{{status}}" } ]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Model call latency, mean seconds",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "sum(rate(support_model_calls_seconds_sum{outcome=\"success\"}[5m])) / sum(rate(support_model_calls_seconds_count{outcome=\"success\"}[5m]))", "legendFormat": "mean" } ]
+    },
+    {
+      "id": 6, "type": "stat", "title": "Circuit breaker (0 closed, 1 open, 2 half open)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [ { "refId": "A", "expr": "max(support_model_circuit_state)" } ]
+    }
+  ]
+}

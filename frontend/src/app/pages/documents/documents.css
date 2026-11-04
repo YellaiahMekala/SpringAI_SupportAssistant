@@ -1,0 +1,23 @@
+.messages {
+  margin-top: 1rem;
+}
+
+.reindex {
+  display: block;
+  color: var(--warn-text);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.actions {
+  margin-top: 1rem;
+}
