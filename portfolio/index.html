@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a2b">
+  <meta name="description" content="Yellaiah Mekala — Senior Java AI Engineer focused on Spring AI, enterprise AI integration, RAG, and cloud-native systems.">
+  <title>Yellaiah Mekala | Senior Java AI Engineer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17243b;
+      --muted: #59677d;
+      --navy: #101a2b;
+      --blue: #1769e0;
+      --blue-dark: #1252b4;
+      --pale: #f3f7fc;
+      --line: #dce5f0;
+      --white: #fff;
+      --green: #147d64;
+      --shadow: 0 16px 42px rgba(16, 36, 67, .08);
+      --radius: 18px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--white);
+      line-height: 1.65;
+    }
+    a { color: var(--blue); }
+    a:hover { color: var(--blue-dark); }
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid #f5b942;
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+    .skip-link {
+      position: absolute;
+      top: -50px;
+      left: 16px;
+      z-index: 20;
+      background: var(--white);
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+    .skip-link:focus { top: 12px; }
+
+    .container { width: min(1120px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(220,229,240,.85);
+    }
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand {
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      letter-spacing: -.03em;
+    }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 22px; }
+    .nav-links a {
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--blue); }
+
+    .hero {
+      color: var(--white);
+      background:
+        radial-gradient(ellipse at 82% 20%, rgba(52, 126, 238, .34), transparent 35%),
+        linear-gradient(135deg, #101a2b 0%, #142a48 100%);
+      padding: 92px 0 82px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      align-items: center;
+      gap: 56px;
+    }
+    .eyebrow {
+      color: #a9c9ff;
+      text-transform: uppercase;
+      font-size: .78rem;
+      letter-spacing: .13em;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 14px 0 12px;
+      max-width: 760px;
+      font-size: clamp(2.4rem, 6vw, 4.65rem);
+      line-height: 1.05;
+      letter-spacing: -.055em;
+    }
+    .hero h2 {
+      margin: 0 0 20px;
+      color: #d5e5ff;
+      font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+    .hero-copy {
+      max-width: 720px;
+      color: #d7e1ef;
+      font-size: 1.08rem;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 10px 17px;
+      border-radius: 10px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .button:hover { transform: translateY(-1px); }
+    .button-primary { background: #fff; color: #123766; }
+    .button-primary:hover { color: #123766; background: #eaf2ff; }
+    .button-outline { border: 1px solid rgba(255,255,255,.45); color: #fff; }
+    .button-outline:hover { color: #fff; background: rgba(255,255,255,.1); }
+    .hero-note { margin-top: 18px; color: #b6c4d7; font-size: .88rem; }
+
+    .focus-card {
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.08);
+      box-shadow: 0 20px 50px rgba(0,0,0,.12);
+    }
+    .focus-card h3 { margin: 0 0 13px; font-size: 1rem; color: #fff; }
+    .focus-card ul { margin: 0; padding-left: 19px; color: #d5e2f2; }
+    .focus-card li + li { margin-top: 8px; }
+
+    section { padding: 76px 0; }
+    section:nth-of-type(even) { background: var(--pale); }
+    .section-heading { max-width: 720px; margin-bottom: 30px; }
+    .section-heading .eyebrow { color: var(--blue); }
+    h2 {
+      margin: 8px 0 10px;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      line-height: 1.18;
+      letter-spacing: -.04em;
+    }
+    .section-intro { color: var(--muted); margin: 0; }
+    .about-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 36px; align-items: start; }
+    .about-copy p:first-child { margin-top: 0; }
+    .skill-card, .card, .timeline-item, .cert-card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .skill-card { padding: 24px; }
+    .skill-card h3 { margin: 0 0 14px; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 9px; }
+    .tag {
+      display: inline-flex;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #edf4ff;
+      color: #254f88;
+      font-size: .82rem;
+      font-weight: 700;
+    }
+
+    .project-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .card { padding: 24px; }
+    .card h3 { margin: 0 0 6px; font-size: 1.2rem; letter-spacing: -.02em; }
+    .card p { color: var(--muted); margin: 14px 0; }
+    .card .stack { color: #43536b; font-size: .9rem; font-weight: 650; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 13px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #eaf7f2;
+      color: var(--green);
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .status-planned { background: #fff5df; color: #8b5a00; }
+    .status-review { background: #eef1f7; color: #4a5870; }
+    .card-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+    .card-links a { font-weight: 750; text-decoration: none; }
+
+    .timeline { display: grid; gap: 16px; }
+    .timeline-item { padding: 24px 26px; }
+    .timeline-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+    .timeline-item h3 { margin: 0; font-size: 1.15rem; }
+    .timeline-item .company { color: var(--blue); font-weight: 750; }
+    .date { color: var(--muted); font-size: .92rem; font-weight: 650; }
+    .timeline-item ul { margin: 14px 0 0; padding-left: 19px; color: var(--muted); }
+    .timeline-item li + li { margin-top: 6px; }
+
+    .cert-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .cert-card { padding: 18px 20px; }
+    .cert-card h3 { margin: 0; font-size: 1rem; }
+    .cert-card p { color: var(--muted); margin: 5px 0 0; font-size: .92rem; }
+    .cert-card a { display: inline-block; margin-top: 9px; font-size: .87rem; font-weight: 700; }
+
+    .contact {
+      color: #fff;
+      background: var(--navy);
+      padding: 68px 0;
+    }
+    .contact .eyebrow { color: #a9c9ff; }
+    .contact h2 { color: #fff; }
+    .contact p { color: #c6d2e1; max-width: 660px; }
+    .contact-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+    .contact-links a {
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.24);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+    .contact-links a:hover { background: rgba(255,255,255,.1); }
+    footer { padding: 20px 0; color: var(--muted); font-size: .88rem; }
+    footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; }
+
+    @media (max-width: 780px) {
+      .hero-grid, .about-grid { grid-template-columns: 1fr; }
+      .hero { padding: 68px 0 60px; }
+      .focus-card { max-width: 520px; }
+      section { padding: 58px 0; }
+    }
+    @media (max-width: 600px) {
+      .container { width: min(100% - 28px, 1120px); }
+      .nav { align-items: flex-start; flex-direction: column; padding: 13px 0; gap: 8px; }
+      .nav-links { gap: 12px 17px; }
+      .nav-links a { font-size: .86rem; }
+      .project-grid, .cert-grid { grid-template-columns: 1fr; }
+      .timeline-item, .card { padding: 20px; }
+      .hero-actions .button { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#home">Yellaiah Mekala</a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#experience">Experience</a>
+        <a href="#certifications">Certifications</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="home">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">Java · Enterprise AI · Cloud</div>
+          <h1>Yellaiah Mekala</h1>
+          <h2>Senior Java AI Engineer</h2>
+          <p class="hero-copy">
+            I build Java and Spring services for enterprise workflows, and explore how
+            generative AI, retrieval, and Python-based AI components can be integrated
+            into systems with clear security, governance, and human oversight.
+          </p>
+          <div class="tag-list" aria-label="Areas of focus">
+            <span class="tag">Spring AI</span>
+            <span class="tag">LangChain4j</span>
+            <span class="tag">RAG</span>
+            <span class="tag">LLM Integration</span>
+            <span class="tag">Agentic AI</span>
+            <span class="tag">AWS</span>
+            <span class="tag">Spring Boot</span>
+            <span class="tag">Microservices</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#projects">Explore my projects</a>
+            <a class="button button-outline" href="https://www.linkedin.com/in/yellaiah-mekala/" target="_blank" rel="noopener noreferrer">LinkedIn profile</a>
+          </div>
+          <p class="hero-note">Independent portfolio projects use synthetic data and are separate from employer and client systems.</p>
+        </div>
+
+        <aside class="focus-card" aria-label="Professional focus">
+          <h3>What I bring</h3>
+          <ul>
+            <li>Enterprise Java and Spring microservices experience</li>
+            <li>AI application patterns across Java and Python</li>
+            <li>Grounded recommendations with human review</li>
+            <li>Security, testing, and operational thinking</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">About</div>
+          <h2>Enterprise engineering with a practical AI focus</h2>
+          <p class="section-intro">A concise view of my experience, interests, and technical focus.</p>
+        </div>
+        <div class="about-grid">
+          <div class="about-copy">
+            <p>
+              I’m a Java backend engineer with experience delivering enterprise services
+              across financial services, insurance, manufacturing, and media. My work has
+              included Spring Boot APIs, Kafka-based integration, secure credential
+              management, CI/CD, containerized deployments, and Angular integrations.
+            </p>
+            <p>
+              My current focus is enterprise AI engineering: applying Spring AI and
+              LangChain4j, exploring retrieval-augmented generation and model governance,
+              and connecting Java systems with Python-based AI components where appropriate.
+              I’m particularly interested in systems where AI can assist, while deterministic
+              application logic and authorized people retain control of important decisions.
+            </p>
+            <p>
+              The projects shown here are independent demonstrations. They use synthetic
+              data and do not contain or derive from client or employer systems.
+            </p>
+          </div>
+          <div class="skill-card">
+            <h3>Technical toolkit</h3>
+            <div class="tag-list">
+              <span class="tag">Java 8–21</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">Spring AI</span>
+              <span class="tag">LangChain4j</span>
+              <span class="tag">Python / FastAPI</span>
+              <span class="tag">RAG</span>
+              <span class="tag">PostgreSQL / pgvector</span>
+              <span class="tag">Kafka</span>
+              <span class="tag">AWS / Bedrock</span>
+              <span class="tag">Docker / Kubernetes</span>
+              <span class="tag">Angular</span>
+              <span class="tag">JUnit / Mockito</span>
+              <span class="tag">CI/CD</span>
+              <span class="tag">Terraform</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Selected work</div>
+          <h2>AI portfolio projects</h2>
+          <p class="section-intro">
+            Java enterprise workflows, Python-based retrieval, and governance patterns.
+            Repository documentation is the source of truth for each project’s current status.
+          </p>
+        </div>
+        <div class="project-grid">
+          <article class="card">
+            <span class="status">Java · Featured project</span>
+            <h3>Reconciliation Break Resolution Copilot</h3>
+            <p>
+              An independent Java/Spring demonstration of AI-assisted reconciliation.
+              The model proposes a structured, evidence-cited recommendation; application
+              policy and authorized reviewers control what happens next.
+            </p>
+            <p class="stack">Java 21 · Spring Boot · Spring AI · PostgreSQL/pgvector · Kafka</p>
+            <div class="card-links">
+              <a href="https://github.com/YellaiahMekala/RAG-Integration-Reconciliation-Application" target="_blank" rel="noopener noreferrer">View repository →</a>
+              <a href="https://github.com/YellaiahMekala/RAG-Integration-Reconciliation-Application/actions" target="_blank" rel="noopener noreferrer">CI runs →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="status">Python AI · Retrieval</span>
+            <h3>Enterprise Knowledge Assistant (EKA)</h3>
+            <p>
+              A document ingestion and retrieval project exploring hybrid search, citations,
+              refusal behavior, and tenant isolation. It demonstrates how Python AI components
+              can fit into a broader Java enterprise architecture.
+            </p>
+            <p class="stack">Python · FastAPI · PostgreSQL/pgvector · Embeddings · Java edge</p>
+            <div class="card-links">
+              <a href="https://github.com/YellaiahMekala/Enterprise-Knowledge-Assistant" target="_blank" rel="noopener noreferrer">View repository →</a>
+              <a href="https://github.com/YellaiahMekala/Enterprise-Knowledge-Assistant/actions" target="_blank" rel="noopener noreferrer">CI runs →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="status-review status">Java · AI governance</span>
+            <h3>AI Gateway</h3>
+            <p>
+              A Java project focused on a governed model-access boundary, including
+              tenant-aware controls, idempotency, privacy safeguards, provider integration,
+              and invocation evidence. See the repository for implementation and verification status.
+            </p>
+            <p class="stack">Java · Spring Boot · LLM integration · PostgreSQL · Redis</p>
+            <div class="card-links">
+              <a href="https://github.com/YellaiahMekala/ai-gateway" target="_blank" rel="noopener noreferrer">View repository →</a>
+              <a href="https://github.com/YellaiahMekala/ai-gateway/actions" target="_blank" rel="noopener noreferrer">CI runs →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="status-planned status">Platform · In progress</span>
+            <h3>Enterprise AI Platform Integration</h3>
+            <p>
+              A planned integration connecting reconcile-ai, EKA, and ai-gateway through
+              explicit service contracts. RERO is a proposed Python recommendation service.
+              The end-to-end integration should be treated as planned until its cross-service
+              tests and demonstration have passed.
+            </p>
+            <p class="stack">Java · Python · HTTP contracts · Identity · AI governance</p>
+            <div class="card-links">
+              <a href="https://github.com/YellaiahMekala/platform" target="_blank" rel="noopener noreferrer">View platform repository →</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <span class="status-review status">AI workflow · Portfolio project</span>
+            <h3>Enterprise Agentic Workflow Orchestrator</h3>
+            <p>
+              A portfolio project exploring multi-agent workflows, LangChain4j, evaluation
+              loops, role-based access controls, and controlled access to application data.
+              Refer to its README for the current implementation and demo details.
+            </p>
+            <p class="stack">Java · LangChain4j · Agentic workflows · RBAC</p>
+            <div class="card-links">
+              <a href="https://github.com/YellaiahMekala/ops-agent" target="_blank" rel="noopener noreferrer">View repository →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Career</div>
+          <h2>Professional experience</h2>
+          <p class="section-intro">Enterprise delivery across financial services, insurance, and other domains.</p>
+        </div>
+        <div class="timeline">
+          <article class="timeline-item">
+            <div class="timeline-top">
+              <h3>Senior Java AI Engineer <span class="company">· LTIMindtree</span></h3>
+              <span class="date">Aug 2023 – May 2025</span>
+            </div>
+            <ul>
+              <li>Delivered Java and Spring Boot microservices for enterprise financial and insurance platforms, including reconciliation workflows for a US banking client.</li>
+              <li>Worked with secure credential management, Docker and Kubernetes deployments, and Jenkins / UrbanCode Deploy delivery pipelines.</li>
+              <li>Built Angular interfaces integrated with Java REST APIs and maintained more than 85% unit-test coverage in the described work.</li>
+              <li>Integrated GitHub Copilot and ChatGPT-4 into development workflows; the reported project results included approximately 30% improvement in feature delivery and code-review throughput.</li>
+              <li>Worked with client-facing APIs for MetLife’s Enterprise Online Store platform.</li>
+            </ul>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-top">
+              <h3>Senior Java Developer · Independent Consulting</h3>
+              <span class="date">May 2021 – Jul 2023</span>
+            </div>
+            <ul>
+              <li>Built Java/JEE and Spring Boot services, REST and SOAP APIs, and integrations using Kafka and JMS.</li>
+              <li>Worked with Terraform, Ansible, Docker, AWS, GCP, MySQL, and MongoDB across consulting engagements.</li>
+              <li>Improved MySQL query performance in one engagement; the reported result was a 40% reduction in slow queries.</li>
+              <li>Supported CI/CD and release automation using TeamCity, Jenkins, and UrbanCode Deploy.</li>
+            </ul>
+          </article>
+
+          <article class="timeline-item">
+            <div class="timeline-top">
+              <h3>Java Developer <span class="company">· Infosys</span></h3>
+              <span class="date">Nov 2017 – Apr 2021</span>
+            </div>
+            <ul>
+              <li>Delivered backend services and APIs for clients in health insurance, financial services, media, and manufacturing.</li>
+              <li>Built intranet microservice APIs for MetLife’s Enterprise Online Store, exposing business data to downstream applications through API Connect.</li>
+              <li>Contributed to Kafka-based integrations and features for a financial workstation under strict service requirements.</li>
+              <li>Worked with Spring, Hibernate/JPA, REST/SOAP, SQL, SAP Commerce/Hybris, and XML/XSD validation.</li>
+            </ul>
+          </article>
+        </div>
+        <p class="hero-note" style="color: var(--muted);">
+          Client names and reported results are included as provided by me. Public use should remain consistent with applicable confidentiality obligations.
+        </p>
+      </div>
+    </section>
+
+    <section id="certifications">
+      <div class="container">
+        <div class="section-heading">
+          <div class="eyebrow">Learning</div>
+          <h2>Certifications and professional learning</h2>
+          <p class="section-intro">Credentials and training related to cloud, Java, and generative AI.</p>
+        </div>
+        <div class="cert-grid">
+          <article class="cert-card">
+            <h3>Generative AI for Java and Spring Developers Specialization</h3>
+            <p>IBM · Coursera · Jul 2026</p>
+            <a href="https://www.coursera.org/account/accomplishments/specialization/2ODUZDH36773" target="_blank" rel="noopener noreferrer">View verification →</a>
+          </article>
+          <article class="cert-card">
+            <h3>Java Microservices with Spring Boot and Spring Cloud</h3>
+            <p>Google Cloud · Coursera · Jan 2025</p>
+            <a href="https://www.coursera.org/account/accomplishments/verify/MJLLJKZU4JJ" target="_blank" rel="noopener noreferrer">View verification →</a>
+          </article>
+          <article class="cert-card">
+            <h3>AWS Partner: Technical Accredited</h3>
+            <p>Amazon Web Services · Jan 2025</p>
+            <a href="https://www.credly.com/badges/c902298c-8103-40fb-97d0-b329a7b3f815" target="_blank" rel="noopener noreferrer">View badge →</a>
+          </article>
+          <article class="cert-card">
+            <h3>AWS Partner Training: AWS Developer Associate</h3>
+            <p>Amazon Web Services · Feb 2025 · Training</p>
+            <p>Training completion; not represented here as an AWS certification.</p>
+          </article>
+          <article class="cert-card">
+            <h3>AI Fundamentals</h3>
+            <p>DataCamp · Jun 2026</p>
+            <a href="https://www.datacamp.com/skill-verification/AIF0024601058383" target="_blank" rel="noopener noreferrer">View verification →</a>
+          </article>
+          <article class="cert-card">
+            <h3>Generative AI Foundations</h3>
+            <p>LTIMindtree · Mar 2024</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="container">
+        <div class="eyebrow">Contact</div>
+        <h2>Let’s talk about Java and enterprise AI</h2>
+        <p>
+          I’m interested in Senior Java AI Engineer, Java AI Cloud Engineer,
+          Java GenAI Developer, and Java Lead opportunities.
+        </p>
+        <div class="contact-links">
+          <a href="mailto:yellaiahmekala614@gmail.com">Email me</a>
+          <a href="https://www.linkedin.com/in/yellaiah-mekala/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/YellaiahMekala" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <span class="button button-outline" aria-label="Résumé will be added later">Résumé coming soon</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <span>© <span id="year">2026</span> Yellaiah Mekala</span>
+      <span>Independent portfolio · Synthetic demonstration data</span>
+    </div>
+  </footer>
+</body>
+</html>
